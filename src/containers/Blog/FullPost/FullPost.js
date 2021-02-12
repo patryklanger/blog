@@ -13,22 +13,34 @@ class FullPost extends Component {
       .then((response) => console.log(response));
   };
 
-  componentDidUpdate() {
-    if (this.props.postId > 0) {
+  fetchDataHandler = () => {
+    if (Number.parseInt(this.props.match.params.id) > 0) {
       if (
         !this.state.loadedPost ||
         (this.state.loadedPost &&
-          this.state.loadedPost.id !== this.props.postId)
+          this.state.loadedPost.id !==
+            Number.parseInt(this.props.match.params.id))
       ) {
         axios
-          .get("/posts/" + this.props.postId)
+          .get("/posts/" + Number.parseInt(this.props.match.params.id))
           .then((response) => this.setState({ loadedPost: response.data }));
       }
     }
+  };
+
+  componentDidUpdate() {
+    console.log("componentDidUpdate");
+    this.fetchDataHandler();
   }
+
+  componentDidMount() {
+    console.log("componentDidMount");
+    this.fetchDataHandler();
+  }
+
   render() {
     let post = <p>Please select a Post!</p>;
-    if (this.props.postId > 0) <p>Loading...</p>;
+    if (Number.parseInt(this.props.match.params.id) > 0) <p>Loading...</p>;
     if (this.state.loadedPost) {
       post = (
         <div className="FullPost">

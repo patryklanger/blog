@@ -1,12 +1,14 @@
 import "./NewPost.css";
 import React, { Component } from "react";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 class NewPost extends Component {
   state = {
     title: "",
     content: "",
     author: "Max",
+    submitted: false,
   };
 
   componentDidMount() {
@@ -19,7 +21,10 @@ class NewPost extends Component {
       body: this.state.content,
       author: this.state.author,
     };
-    axios.post("/posts/", post).then((response) => console.log(response));
+    axios.post("/posts/", post).then((response) => {
+      console.log(response);
+      this.props.history.push("/posts");
+    });
   };
 
   render() {
