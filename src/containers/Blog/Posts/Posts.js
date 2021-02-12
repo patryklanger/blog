@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import FullPost from "../components/FullPost/FullPost";
-import Post from "../components/Post/Post";
-import "./Blog.css";
-import NewPost from "../components/NewPost/NewPost";
-import axios from "axios";
+import axios from "../../../axios";
+import Post from "../../../components/Post/Post";
+import "./Posts.css";
+import { Route, Link } from "react-router-dom";
 
-class Blog extends Component {
+class Posts extends Component {
   state = {
     posts: [],
-    selectedPostId: -1,
+    selectedPostId: null,
     error: false,
   };
   componentDidMount() {
+    console.log(this.props);
     axios
       .get("/posts")
       .then((response) => {
@@ -24,12 +24,16 @@ class Blog extends Component {
         });
         this.setState({ posts: updatedPosts });
       })
-      .catch((error) => this.setState({ error: true }));
+      .catch((error) => {
+        console.log(error);
+        // this.setState({ error: true });
+      });
   }
+
   postSelectedHandler = (id) => {
+    console.log(this.state.posts);
     this.setState({ selectedPostId: id });
   };
-
   render() {
     let posts = <p>Something went wrong buddy!</p>;
     if (this.state.error === false)
@@ -44,16 +48,7 @@ class Blog extends Component {
         );
       });
 
-    return (
-      <div>
-        <section className="Posts">{posts}</section>
-        <FullPost postId={this.state.selectedPostId} />
-        <section>
-          <NewPost />
-        </section>
-      </div>
-    );
+    return <section className="Posts">{posts}</section>;
   }
 }
-
-export default Blog;
+export default Posts;
